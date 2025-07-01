@@ -3,6 +3,7 @@ import Home from './pages/Home';
 import AddExpense from './pages/AddExpense';
 import ExpenseHistory from './pages/ExpenseHistory';
 import Summary from './pages/Summary';
+import EditExpense from './pages/EditExpense';
 
 function App() {
   return (
@@ -22,6 +23,8 @@ function App() {
         <Route path="/add" element={<AddExpense />} />
         <Route path="/history" element={<ExpenseHistory />} />
         <Route path="/summary" element={<Summary />} />
+        <Route path="/edit/:id" element={<EditExpense />} />
+
       </Routes>
     </div>
   );

@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
 
 
 const ExpenseHistory = () => {
+  const navigate = useNavigate();
   const [expenses, setExpenses] = useState([]);
   const [visibleReceipts, setVisibleReceipts] = useState({});
   
@@ -79,6 +82,12 @@ const ExpenseHistory = () => {
                 >
                   Delete
                 </button>
+                <button
+                  className="bg-blue-500 text-white px-2 py-1 rounded ml-2"
+                  onClick={() => navigate(`/edit/${expense._id}`)}
+                >
+                  Edit
+               </button>
               </div>
             </div>
           </li>
