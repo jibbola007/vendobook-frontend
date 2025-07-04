@@ -81,6 +81,9 @@ const Home = () => {
             Your smart expense tracker — log your daily expenses, upload receipts,
             and monitor your spending in real-time.
           </p>
+          <div className="home-image">
+      <img src="/hero-illustration.png" alt="Finance Illustration" />
+      </div>
           <div className="button-group">
             <a href="/add" className="primary-btn">Add Expense</a>
             <a href="/history" className="secondary-btn">View History</a>
@@ -89,6 +92,8 @@ const Home = () => {
         {/* Optional: Insert a hero image here if needed */}
       </div>
 
+      
+      <div className="home-chart-container">
       <div className="home-chart">
         <h2>Expense Chart</h2>
 
@@ -124,6 +129,7 @@ const Home = () => {
           )}
         </div>
       </div>
+    </div>
     </div>
   );
 };

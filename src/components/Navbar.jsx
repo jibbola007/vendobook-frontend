@@ -1,6 +1,9 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import './Navbar.css';
+import ThemeToggle from './ThemeToggle';
+
+
 
 const Navbar = () => {
   const location = useLocation();
@@ -10,10 +13,11 @@ const Navbar = () => {
 
   return (
     <header className="navbar">
+      
       <div className="navbar-left">
         <img src="/logo.png" alt="Logo" className="logo" />
       </div>
-
+      
       <nav className="navbar-center">
         <Link to="/" className={linkClasses('/')}>Home</Link>
         <Link to="/add" className={linkClasses('/add')}>Add Expense</Link>
@@ -21,8 +25,10 @@ const Navbar = () => {
         <Link to="/summary" className={linkClasses('/summary')}>Summary</Link>
       </nav>
 
-      
-    </header>
+      <div className="navbar-right">
+        <ThemeToggle />
+      </div>
+      </header>
   );
 };
 

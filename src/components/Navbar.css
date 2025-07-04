@@ -1,22 +1,19 @@
 .navbar {
   display: flex;
+  flex-wrap: wrap;
+  align-items: center;
   justify-content: space-between;
-  align-items: center;
-  padding: 1rem 2rem;
-  background-color: white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  position: relative;
-}
-
-.navbar-left,
-.navbar-center,
-.navbar-right {
-  display: flex;
-  align-items: center;
+  padding: 12px 24px;
+  background-color: var(--bg-color);
+  border-bottom: 1px solid #e5e7eb;
+  gap: 12px;
 }
 
 .navbar-left {
-  flex: 1;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
 .navbar-center {
@@ -26,25 +23,26 @@
   gap: 1rem;
 }
 
+
 .navbar-right {
-  flex: 1;
+  display: flex;
+  align-items: center;
   justify-content: flex-end;
+  flex-shrink: 0;
+  margin-left: auto;
   gap: 1rem;
 }
 
 .logo {
-  width: 40px;
-  height: 40px;
+  width: 100px;
+  height: 100px;
   object-fit: contain;
 }
 
 .nav-link {
-  text-decoration: none;
-  color: #374151;
+  font-size: 1rem;
   padding: 6px 12px;
-  border-radius: 6px;
-  font-weight: 500;
-  transition: background-color 0.2s, color 0.2s;
+  white-space: nowrap; /* optional: prevents multi-line link text */
 }
 
 .nav-link:hover {
@@ -64,4 +62,45 @@
   border: none;
   border-radius: 6px;
   cursor: pointer;
+}
+
+.nav-links {
+  display: flex;
+  flex-wrap: wrap;   /* allows links to wrap instead of overlap */
+  gap: 12px;
+  flex: 1;
+  justify-content: flex-start;
+  min-width: 0;
+}
+
+
+
+
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .navbar-left {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .nav-links {
+    justify-content: center;
+    margin-top: 12px;
+    flex: 100%;
+  }
+
+  .navbar-right {
+    justify-content: center;
+    margin-top: 12px;
+    flex: 100%;
+  }
+
+  .nav-link {
+    display: block;
+    width: 100%;
+  }
 }

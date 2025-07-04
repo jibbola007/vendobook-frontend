@@ -4,13 +4,13 @@ import ExpenseHistory from './pages/ExpenseHistory';
 import Summary from './pages/Summary';
 import EditExpense from './pages/EditExpense';
 import Navbar from './components/Navbar';
-
+import Footer from './components/Footer';
 
 function App() {
   return (
-      
-      <div className="min-h-screen bg-white">
-        <Navbar />
+    <div className="app-container">
+      <Navbar />
+      <main className="main-content">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/add" element={<AddExpense />} />
@@ -18,8 +18,9 @@ function App() {
           <Route path="/summary" element={<Summary />} />
           <Route path="/edit/:id" element={<EditExpense />} />
         </Routes>
-      </div>
-  
+      </main>
+      <Footer />
+    </div>
   );
 }
  

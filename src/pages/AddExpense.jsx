@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 
+
 export default function AddExpense() {
   const [form, setForm] = useState({
     amount: '',
@@ -85,6 +86,7 @@ export default function AddExpense() {
             <option value="Transport">Transport</option>
             <option value="Bills">Bills</option>
             <option value="Groceries">Groceries</option>
+            <option value="Entertainment">Entertainment</option>
             <option value="Others">Others</option>
           </select>
         </div>
