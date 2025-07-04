@@ -15,12 +15,14 @@
   .home-text {
     flex: 1;
     min-width: 300px;
+    text-align: center;
   }
   
   .home-text h1 {
     font-size: 2.5rem;
     font-weight: 700;
     color: #1f2937;
+    
   }
   
   .home-text .highlight {
@@ -32,6 +34,9 @@
     font-size: 1rem;
     margin-top: 12px;
     max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
   }
   
   .button-group {
@@ -39,6 +44,7 @@
     display: flex;
     gap: 16px;
     flex-wrap: wrap;
+    justify-content: center;
   }
   
   .primary-btn,
@@ -78,6 +84,7 @@
     font-weight: 600;
     margin-bottom: 10px;
     color: #374151;
+    text-align: center;
   }
   
   .chart-box {
@@ -93,4 +100,80 @@
     font-size: 0.95rem;
     text-align: center;
     padding-top: 100px;
+  }
+
+  .spending-summary {
+    text-align: center;
+    margin-top: 30px;
+    color: #1f2937;
+  }
+  .spending-summary h3 {
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+  }
+
+  .summary-section {
+    margin: 40px 0;
+  }
+  
+  .summary-section h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 16px;
+  }
+  
+  .summary-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-between;
+  }
+  
+  .summary-card {
+    flex: 1 1 200px;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+  }
+  
+  .summary-card span {
+    display: block;
+    font-size: 0.95rem;
+    color: #6b7280;
+    margin-bottom: 8px;
+  }
+  
+  .summary-card strong {
+    font-size: 1.25rem;
+    color: #111827;
+  }
+
+  .filter-buttons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+    justify-content: center;
+  }
+  
+  .filter-btn {
+    padding: 6px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    background: white;
+    cursor: pointer;
+    transition: 0.2s ease;
+  }
+  
+  .filter-btn:hover {
+    background-color: #f3f4f6;
+  }
+  
+  .filter-btn.active {
+    background-color: #3b82f6;
+    color: white;
+    border-color: #3b82f6;
   }
