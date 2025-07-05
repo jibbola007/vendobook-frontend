@@ -1,0 +1,71 @@
+.edit-container {
+    max-width: 500px;
+    margin: 40px auto;
+    padding: 24px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  }
+  
+  .edit-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #1f2937;
+  }
+  
+  .edit-form label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 500;
+    color: #374151;
+  }
+  
+  .edit-form input,
+  .edit-form select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+  }
+  
+  .button-group {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  
+  .btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .btn.green {
+    background-color: #10b981;
+    color: white;
+  }
+  
+  .btn.green:hover {
+    background-color: #059669;
+  }
+  
+  .btn.gray {
+    background-color: #e5e7eb;
+    color: #374151;
+  }
+  
+  .btn.gray:hover {
+    background-color: #d1d5db;
+  }
+  
+  .loading-msg {
+    text-align: center;
+    font-size: 1rem;
+    margin-top: 100px;
+    color: #6b7280;
+  }

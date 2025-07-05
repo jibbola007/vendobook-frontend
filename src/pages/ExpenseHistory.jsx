@@ -1,32 +1,89 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import './ExpenseHistory.css';
+
+const currencySymbols = {
+  NGN: '₦',
+  USD: '$',
+  EUR: '€',
+  GBP: '£',
+  KES: 'Ksh',
+};
 
 
+// Helpers
+const getWeekNumber = (date) => {
+  const start = new Date(date.getFullYear(), 0, 1);
+  const diff = (date - start) + (start.getTimezoneOffset() - date.getTimezoneOffset()) * 60 * 1000;
+  return Math.floor(diff / (7 * 24 * 60 * 60 * 1000)) + 1;
+};
+
+const groupByMonth = (expenses) => {
+  return expenses.reduce((groups, expense) => {
+    const date = new Date(expense.createdAt);
+    const label = date.toLocaleString('default', { month: 'long', year: 'numeric' });
+    if (!groups[label]) groups[label] = [];
+    groups[label].push(expense);
+    return groups;
+  }, {});
+};
+
+const groupByWeek = (expenses) => {
+  return expenses.reduce((groups, expense) => {
+    const date = new Date(expense.createdAt);
+    const year = date.getFullYear();
+    const week = getWeekNumber(date);
+    const label = `Week ${week}, ${year}`;
+    if (!groups[label]) groups[label] = [];
+    groups[label].push(expense);
+    return groups;
+  }, {});
+};
 
 const ExpenseHistory = () => {
   const navigate = useNavigate();
-  const [expenses, setExpenses] = useState([]);
+  const [allExpenses, setAllExpenses] = useState([]);
   const [visibleReceipts, setVisibleReceipts] = useState({});
-  
+  const [groupBy, setGroupBy] = useState('month');
+  const [groupedExpenses, setGroupedExpenses] = useState({});
+  const [selectedMonth, setSelectedMonth] = useState('');
+  const [selectedYear, setSelectedYear] = useState('');
+
   useEffect(() => {
     const fetchExpenses = async () => {
       try {
         const res = await axios.get('http://localhost:5000/api/expenses');
-        setExpenses(res.data);
-      } catch (err) {
-        console.error('Error fetching expenses:', err);
+        setAllExpenses(res.data);
+      } catch (error) {
+        console.error('Error fetching expenses:', error);
       }
     };
-
     fetchExpenses();
   }, []);
+
+  useEffect(() => {
+    let filtered = [...allExpenses];
+  
+    if (selectedMonth && selectedYear) {
+      filtered = filtered.filter((expense) => {
+        const date = new Date(expense.createdAt);
+        return (
+          date.getMonth() + 1 === parseInt(selectedMonth) &&
+          date.getFullYear() === parseInt(selectedYear)
+        );
+      });
+    }
+  
+    const grouped = groupBy === 'week' ? groupByWeek(filtered) : groupByMonth(filtered);
+    setGroupedExpenses(grouped);
+  }, [groupBy, allExpenses, selectedMonth, selectedYear]);
 
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this expense?')) return;
     try {
       await axios.delete(`http://localhost:5000/api/expenses/${id}`);
-      setExpenses(expenses.filter(exp => exp._id !== id));
+      setAllExpenses((prev) => prev.filter((exp) => exp._id !== id));
     } catch (err) {
       console.error('Error deleting expense:', err);
     }
@@ -35,66 +92,87 @@ const ExpenseHistory = () => {
   const toggleReceipt = (id) => {
     setVisibleReceipts((prev) => ({
       ...prev,
-      [id]: !prev[id], // toggle visibility for this specific expense
+      [id]: !prev[id],
     }));
   };
 
   return (
-    <div className="p-4">
-      <h2 className="text-xl font-bold mb-4">Expense History</h2>
-      {expenses.length === 0 ? (
-        <p>No expenses found.</p>
+    <div className="history-container">
+      <h2 className="history-title">📜 Expense History</h2>
+
+      <div className="filter-controls">
+  <label>Month:</label>
+  <select value={selectedMonth} onChange={(e) => setSelectedMonth(e.target.value)}>
+    <option value="">--</option>
+    {Array.from({ length: 12 }, (_, i) => (
+      <option key={i + 1} value={i + 1}>
+        {new Date(0, i).toLocaleString('default', { month: 'long' })}
+      </option>
+    ))}
+  </select>
+
+  <label>Year:</label>
+  <select value={selectedYear} onChange={(e) => setSelectedYear(e.target.value)}>
+    <option value="">--</option>
+    {Array.from({ length: 36 }, (_, i) => {
+      const year = 2025 + i;
+      return (
+        <option key={year} value={year}>
+          {year}
+        </option>
+      );
+    })}
+  </select>
+</div>
+
+      {Object.keys(groupedExpenses).length === 0 ? (
+        <p className="no-expenses">No expenses found.</p>
       ) : (
-        <ul className="space-y-4">
-          {expenses.map((expense) => (
-            <li key={expense._id} className="border p-4 rounded-lg shadow">
-            <div className="flex justify-between items-start gap-4 flex-wrap">
-              <div className="flex-1">
-                <p><strong>Amount:</strong> ₦{expense.amount}</p>
-                <p><strong>Description:</strong> {expense.description}</p>
-                <p><strong>Category:</strong> {expense.category}</p>
-                <p><strong>Date:</strong> {new Date(expense.createdAt).toLocaleString()}</p>
-              </div>
-          
-              <div className="flex flex-col items-center gap-2">
-              {expense.receipt && (
-  <>
-    <button
-      className="text-blue-500 underline text-sm"
-      onClick={() => toggleReceipt(expense._id)}
-    >
-      {visibleReceipts[expense._id] ? 'Hide Receipt' : 'View Receipt'}
-    </button>
+        Object.entries(groupedExpenses).map(([period, expenses]) => (
+          <div key={period} className="expense-group">
+            <h3 className="expense-group-title">{period}</h3>
+            <ul className="expense-list">
+              {expenses.map((expense) => (
+                <li key={expense._id} className="expense-card">
+                  <div className="expense-details">
+                    
+                  <p>
+                  <strong>Amount:</strong> {currencySymbols[expense.currency] || '₦'}{expense.amount}
+                  </p>
+                    <p><strong>Description:</strong> {expense.description}</p>
+                    <p><strong>Category:</strong> {expense.category}</p>
+                    <p><strong>Date:</strong> {new Date(expense.createdAt).toLocaleString()}</p>
+                  </div>
 
-    {visibleReceipts[expense._id] && (
-      <img
-        src={`http://localhost:5000/uploads/${expense.receipt}`}
-        alt="Receipt"
-        className="w-32 h-32 object-cover border rounded mt-2"
-      />
-    )}
-  </>
-)}
+                  <div className="expense-actions">
+                    {expense.receipt && (
+                      <>
+                        <button className="link-btn" onClick={() => toggleReceipt(expense._id)}>
+                          {visibleReceipts[expense._id] ? 'Hide Receipt' : 'View Receipt'}
+                        </button>
+                        {visibleReceipts[expense._id] && (
+                          <img
+                            src={`http://localhost:5000/uploads/${expense.receipt}`}
+                            alt="Receipt"
+                            className="receipt-image"
+                          />
+                        )}
+                      </>
+                    )}
 
-                <button
-                  className="bg-red-500 text-white px-2 py-1 rounded"
-                  onClick={() => handleDelete(expense._id)}
-                >
-                  Delete
-                </button>
-                <button
-                  className="bg-blue-500 text-white px-2 py-1 rounded ml-2"
-                  onClick={() => navigate(`/edit/${expense._id}`)}
-                >
-                  Edit
-               </button>
-              </div>
-            </div>
-          </li>
-          ))}
-        </ul>
+                    <button className="btn red" onClick={() => handleDelete(expense._id)}>
+                      Delete
+                    </button>
+                    <button className="btn blue" onClick={() => navigate(`/edit/${expense._id}`)}>
+                      Edit
+                    </button>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
       )}
-      
     </div>
   );
 };

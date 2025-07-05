@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import './EditExpense.css'; // Optional: If you prefer separating styles
 
 const EditExpense = () => {
   const { id } = useParams();
@@ -14,17 +15,18 @@ const EditExpense = () => {
   });
 
   useEffect(() => {
-    axios.get(`http://localhost:5000/api/expenses/${id}`)
-      .then(res => {
+    axios
+      .get(`http://localhost:5000/api/expenses/${id}`)
+      .then((res) => {
         setExpense(res.data);
         setFormData({
           amount: res.data.amount,
           description: res.data.description,
           category: res.data.category,
-          receipt: null, // leave file empty by default
+          receipt: null,
         });
       })
-      .catch(err => console.error('❌ Error loading expense:', err));
+      .catch((err) => console.error('❌ Error loading expense:', err));
   }, [id]);
 
   const handleChange = (e) => {
@@ -54,45 +56,61 @@ const EditExpense = () => {
     }
   };
 
-  if (!expense) return <p>Loading...</p>;
+  if (!expense) return <p className="loading-msg">Loading...</p>;
 
   return (
-    <div className="p-4 max-w-xl mx-auto">
-      <h2 className="text-xl font-bold mb-4">Edit Expense</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="edit-container">
+      <h2 className="edit-title">✏️ Edit Expense</h2>
+
+      <form onSubmit={handleSubmit} className="edit-form">
+        <label>Amount (₦)</label>
         <input
           type="number"
           name="amount"
-          placeholder="Amount"
           value={formData.amount}
           onChange={handleChange}
-          className="w-full border p-2 rounded"
+          required
         />
+
+        <label>Description</label>
         <input
           type="text"
           name="description"
-          placeholder="Description"
           value={formData.description}
           onChange={handleChange}
-          className="w-full border p-2 rounded"
+          required
         />
-        <input
-          type="text"
+
+        <label>Category</label>
+        <select
           name="category"
-          placeholder="Category"
           value={formData.category}
           onChange={handleChange}
-          className="w-full border p-2 rounded"
-        />
+          required
+        >
+          <option value="">-- Select --</option>
+          <option value="Food">Food</option>
+          <option value="Transport">Transport</option>
+          <option value="Bills">Bills</option>
+          <option value="Groceries">Groceries</option>
+          <option value="Entertainment">Entertainment</option>
+          <option value="Others">Others</option>
+        </select>
+
+        <label>New Receipt (optional)</label>
         <input
           type="file"
           name="receipt"
           onChange={handleChange}
-          className="w-full"
+          accept="image/*"
         />
-        <button type="submit" className="bg-green-600 text-white px-4 py-2 rounded">
-          Update
-        </button>
+
+        <div className="button-group">
+          <button type="submit" className="btn green">✅ Update</button>
+          <button type="button" className="btn gray" onClick={() => navigate('/history')}>
+            ⬅ Back to History
+          </button>
+        </div>
       </form>
     </div>
   );
