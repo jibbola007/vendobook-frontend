@@ -1,7 +1,16 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useCurrency } from '../context/CurrencyContext';
+import './Summary.css';
+
+const currencySymbols = {
+  NGN: '₦',
+ 
+};
 
 const Summary = () => {
+  const { currency } = useCurrency();
+
   const [expenses, setExpenses] = useState([]);
   const [summary, setSummary] = useState({
     totalAmount: 0,
@@ -43,20 +52,33 @@ const Summary = () => {
   }, [expenses]);
 
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Expense Summary</h2>
-      <p className="text-lg">Total Expenses: {summary.count}</p>
-      <p className="text-lg">Total Spent: ₦{summary.totalAmount.toFixed(2)}</p>
+    <div className="summary-container">
+  <h2 className="summary-title">📊 Expense Summary</h2>
 
-      <h3 className="text-xl font-semibold mt-6">Category Breakdown:</h3>
-      <ul className="mt-2">
-        {Object.entries(summary.categoryTotals).map(([category, total]) => (
-          <li key={category} className="border p-2 rounded mt-1">
-            {category}: ₦{total.toFixed(2)}
-          </li>
-        ))}
-      </ul>
+  <div className="summary-cards">
+    <div className="summary-card">
+      <h3>Total Expenses</h3>
+      <p>{summary.count}</p>
     </div>
+    <div className="summary-card">
+      <h3>Total Spent</h3>
+      <p>{currencySymbols[currency] || '₦'}{Number(summary.totalAmount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+    </div>
+  </div>
+
+  <h3 className="breakdown-title">🗂 Category Breakdown</h3>
+  <div className="category-grid">
+    {Object.entries(summary.categoryTotals).map(([category, total]) => (
+      <div key={category} className="category-card">
+        <span className="category-name">{category}</span>
+        <span className="category-amount">
+  {currencySymbols[currency] || '₦'}
+  {Number(total).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+</span>
+      </div>
+    ))}
+  </div>
+</div>
   );
 };
 

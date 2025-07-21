@@ -84,10 +84,7 @@ const Home = () => {
           <div className="home-image">
       <img src="/hero-illustration.png" alt="Finance Illustration" />
       </div>
-          <div className="button-group">
-            <a href="/add" className="primary-btn">Add Expense</a>
-            <a href="/history" className="secondary-btn">View History</a>
-          </div>
+          
         </div>
         {/* Optional: Insert a hero image here if needed */}
       </div>

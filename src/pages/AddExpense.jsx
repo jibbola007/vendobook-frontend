@@ -1,16 +1,23 @@
 import { useState } from 'react';
 import axios from 'axios';
 import './AddExpense.css';
+import { useCurrency } from '../context/CurrencyContext';
+
+
+const formatNumberWithCommas = (value) => {
+  if (!value) return '';
+  return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+};
 
 export default function AddExpense() {
+  const { currency, setCurrency } = useCurrency();
   const [form, setForm] = useState({
     amount: '',
-    currency: 'NGN',
     description: '',
     category: '',
     receipt: null,
   });
-
+  
   const [success, setSuccess] = useState('');
 
   const handleChange = (e) => {
@@ -28,11 +35,13 @@ export default function AddExpense() {
       alert('Amount must be greater than 0');
       return;
     }
+   
 
     const formData = new FormData();
-    formData.append('amount', form.amount);
+    formData.append('amount', parseFloat(form.amount));
     formData.append('description', form.description);
     formData.append('category', form.category);
+    formData.append('currency', currency);
     if (form.receipt) formData.append('receipt', form.receipt);
 
     try {
@@ -60,30 +69,32 @@ export default function AddExpense() {
         <div style={{ flex: 1 }}>
         <label className="form-label">Amount</label>
         <input
-      type="number"
-      name="amount"
-      value={form.amount}
-      onChange={handleChange}
-      className="form-input"
-      required
-    />
+  type="text"
+  name="amount"
+  value={formatNumberWithCommas(form.amount)}
+  onChange={(e) => {
+    const rawValue = e.target.value.replace(/,/g, '');
+    if (/^\d*$/.test(rawValue)) {
+      setForm((prev) => ({ ...prev, amount: rawValue }));
+    }
+  }}
+  className="form-input"
+  required
+/>
   </div>
 
   <div style={{ width: '30%' }}>
-    <label className="form-label">Currency</label>
-    <select
-      name="currency"
-      value={form.currency}
-      onChange={handleChange}
-      className="form-input"
-    >
-      <option value="NGN">₦ NGN</option>
-      <option value="USD">$ USD</option>
-      <option value="EUR">€ EUR</option>
-      <option value="GBP">£ GBP</option>
-      <option value="KES">Ksh KES</option>
-    </select>
-  </div>
+  <label className="form-label">Currency</label>
+  <select
+    value={currency}
+    onChange={(e) => setCurrency(e.target.value)}
+    className="form-input"
+    required
+  >
+    <option value="₦">₦ - Naira</option>
+  
+  </select>
+</div>
 </div>
 
           <div>
@@ -127,10 +138,11 @@ export default function AddExpense() {
               className="form-input"
             />
           </div>
-
+             
           <button type="submit" className="submit-btn">
             Save Expense
           </button>
+          
         </form>
       </div>
     </div>

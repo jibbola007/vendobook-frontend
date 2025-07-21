@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './ExpenseHistory.css';
+import { useCurrency } from '../context/CurrencyContext';
 
 const currencySymbols = {
   NGN: '₦',
@@ -10,6 +11,7 @@ const currencySymbols = {
   GBP: '£',
   KES: 'Ksh',
 };
+
 
 
 // Helpers
@@ -42,6 +44,7 @@ const groupByWeek = (expenses) => {
 };
 
 const ExpenseHistory = () => {
+  const { currency, } = useCurrency();
   const navigate = useNavigate();
   const [allExpenses, setAllExpenses] = useState([]);
   const [visibleReceipts, setVisibleReceipts] = useState({});
@@ -49,6 +52,7 @@ const ExpenseHistory = () => {
   const [groupedExpenses, setGroupedExpenses] = useState({});
   const [selectedMonth, setSelectedMonth] = useState('');
   const [selectedYear, setSelectedYear] = useState('');
+  
 
   useEffect(() => {
     const fetchExpenses = async () => {
@@ -137,7 +141,9 @@ const ExpenseHistory = () => {
                   <div className="expense-details">
                     
                   <p>
-                  <strong>Amount:</strong> {currencySymbols[expense.currency] || '₦'}{expense.amount}
+                  <strong>Amount:</strong>{' '}
+                  {currencySymbols[expense.currency] || '₦'}
+                  {Number(expense.amount).toLocaleString()}
                   </p>
                     <p><strong>Description:</strong> {expense.description}</p>
                     <p><strong>Category:</strong> {expense.category}</p>

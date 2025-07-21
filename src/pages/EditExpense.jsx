@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './EditExpense.css'; // Optional: If you prefer separating styles
+import { useCurrency } from '../context/CurrencyContext';
 
 const EditExpense = () => {
+  const { currency } = useCurrency();
   const { id } = useParams();
   const navigate = useNavigate();
   const [expense, setExpense] = useState(null);
@@ -44,6 +46,7 @@ const EditExpense = () => {
     updateData.append('amount', formData.amount);
     updateData.append('description', formData.description);
     updateData.append('category', formData.category);
+    updateData.append('currency', formData.currency);
     if (formData.receipt) {
       updateData.append('receipt', formData.receipt);
     }
@@ -63,7 +66,8 @@ const EditExpense = () => {
       <h2 className="edit-title">✏️ Edit Expense</h2>
 
       <form onSubmit={handleSubmit} className="edit-form">
-        <label>Amount (₦)</label>
+      <label>Amount ({currency})</label>
+
         <input
           type="number"
           name="amount"
@@ -96,6 +100,7 @@ const EditExpense = () => {
           <option value="Entertainment">Entertainment</option>
           <option value="Others">Others</option>
         </select>
+
 
         <label>New Receipt (optional)</label>
         <input

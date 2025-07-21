@@ -1,0 +1,41 @@
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { useAuth } from '../context/AuthContext';
+
+export default function Login() {
+  const [form, setForm] = useState({ email: '', password: '' });
+  const [message, setMessage] = useState('');
+  const navigate = useNavigate();
+  const { setUser } = useAuth();
+
+  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post('http://localhost:5000/api/auth/login', form);
+      setUser(res.data.user);
+      localStorage.setItem('token', res.data.token);
+  
+      setMessage('✅ Logged in!');
+      navigate('/');
+    } catch (err) {
+      console.error(err);
+      setMessage('❌ ' + (err.response?.data?.message || 'Login failed'));
+    }
+  };
+
+  return (
+    <div className="login-container">
+      <h1>Welcome Back</h1>
+      <p>Don't have an account? <Link to="/signup">Create one</Link></p>
+      {message && <p>{message}</p>}
+      <form onSubmit={handleSubmit}>
+        <input name="email" value={form.email} onChange={handleChange} placeholder="Email" required />
+        <input name="password" type="password" value={form.password} onChange={handleChange} placeholder="Password" required />
+        <button type="submit">Login</button>
+      </form>
+    </div>
+  );
+}
