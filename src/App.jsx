@@ -6,6 +6,7 @@ import Home from './pages/Home';
 import AddExpense from './pages/AddExpense';
 import Summary from './pages/Summary';
 import ExpenseHistory from './pages/ExpenseHistory';
+import EditExpense from './pages/EditExpense';
 import Navbar from './components/Navbar';
 import PrivateRoute from './components/PrivateRoute';
 import { useAuth } from './context/AuthContext';
@@ -48,6 +49,12 @@ function AppContent() {
             <Summary />
           </PrivateRoute>
         } />
+        <Route path="/edit/:id" element={
+          <PrivateRoute>
+            <EditExpense />
+          </PrivateRoute>
+        } />
+
       </Routes>
     </>
   );
