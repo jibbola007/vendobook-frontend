@@ -43,11 +43,15 @@
   font-size: 1rem;
   padding: 6px 12px;
   white-space: nowrap; /* optional: prevents multi-line link text */
+  text-decoration: none;
+  color: inherit;
 }
 
 .nav-link:hover {
   background-color: #e0f2fe;
   color: #1d4ed8;
+  border-radius: 6px;
+  transition: all 0.2s ease;
 }
 
 .nav-link.active {
