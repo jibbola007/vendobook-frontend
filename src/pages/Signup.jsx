@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
+import './signup.css';
+
 
 export default function Signup() {
   const [form, setForm] = useState({ email: '', password: '' });
@@ -27,6 +29,12 @@ export default function Signup() {
         <input name="password" type="password" value={form.password} onChange={handleChange} placeholder="Password" required />
         <button type="submit">Sign Up</button>
       </form>
+      {message.includes('successfully') && (
+        <button onClick={() => window.location.href = '/login'} style={{ marginTop: '1rem' }}>
+          Go to Login
+        </button>
+      )}
+      
     </div>
   );
 }

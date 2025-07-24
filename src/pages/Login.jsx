@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import './login.css';
+
 
 export default function Login() {
   const [form, setForm] = useState({ email: '', password: '' });
@@ -28,7 +30,7 @@ export default function Login() {
 
   return (
     <div className="login-container">
-      <h1>Welcome Back</h1>
+      <h1>Welcome To VendoBook</h1>
       <p>Don't have an account? <Link to="/signup">Create one</Link></p>
       {message && <p>{message}</p>}
       <form onSubmit={handleSubmit}>
@@ -36,6 +38,8 @@ export default function Login() {
         <input name="password" type="password" value={form.password} onChange={handleChange} placeholder="Password" required />
         <button type="submit">Login</button>
       </form>
+      <p><Link to="/forgot-password">Forgot Password?</Link></p>
+
     </div>
   );
 }

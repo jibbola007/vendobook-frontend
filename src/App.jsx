@@ -7,7 +7,9 @@ import AddExpense from './pages/AddExpense';
 import Summary from './pages/Summary';
 import ExpenseHistory from './pages/ExpenseHistory';
 import EditExpense from './pages/EditExpense';
+import ForgotPassword from './pages/ForgotPassword';
 import Navbar from './components/Navbar';
+import Footer from './components/Footer';
 import PrivateRoute from './components/PrivateRoute';
 import { useAuth } from './context/AuthContext';
 
@@ -27,6 +29,7 @@ function AppContent() {
         {/* Public Routes */}
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} /> 
 
         {/* Protected Routes */}
         <Route path="/" element={
@@ -56,6 +59,8 @@ function AppContent() {
         } />
 
       </Routes>
+      
+      <Footer/>
     </>
   );
 }
