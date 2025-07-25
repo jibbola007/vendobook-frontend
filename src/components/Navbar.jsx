@@ -26,6 +26,7 @@ const Navbar = () => {
 
   return (
     <header className="navbar">
+      
       <div className="navbar-left">
         <img src="/logo.png" alt="Logo" className="logo" />
       </div>
