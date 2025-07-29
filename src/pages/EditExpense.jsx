@@ -18,8 +18,8 @@ const EditExpense = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/api/expenses/${id}`)
-      .then((res) => {
+    axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/expenses/${id}`)
+    .then((res) => {
         setExpense(res.data);
         setFormData({
           amount: res.data.amount,
@@ -52,8 +52,11 @@ const EditExpense = () => {
     }
 
     try {
-      await axios.put(`http://localhost:5000/api/expenses/${id}`, updateData);
-      navigate('/history');
+      await axios.put(`${import.meta.env.VITE_API_BASE_URL}/api/expenses/${id}`, updateData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });      navigate('/history');
     } catch (err) {
       console.error('❌ Failed to update expense:', err);
     }

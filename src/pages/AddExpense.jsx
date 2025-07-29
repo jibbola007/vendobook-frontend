@@ -45,8 +45,11 @@ export default function AddExpense() {
     if (form.receipt) formData.append('receipt', form.receipt);
 
     try {
-      const response = await axios.post('http://localhost:5000/api/expenses', formData);
-      console.log('✅ Expense saved:', response.data);
+      const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/expenses`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });      console.log('✅ Expense saved:', response.data);
       setSuccess('Expense saved successfully!');
       setForm({ amount: '', description: '', category: '', receipt: null });
 

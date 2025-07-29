@@ -12,7 +12,7 @@ const currencySymbols = {
   KES: 'Ksh',
 };
 
-
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 // Helpers
 const getWeekNumber = (date) => {
@@ -44,7 +44,7 @@ const groupByWeek = (expenses) => {
 };
 
 const ExpenseHistory = () => {
-  const { currency, } = useCurrency();
+  const { currency } = useCurrency();
   const navigate = useNavigate();
   const [allExpenses, setAllExpenses] = useState([]);
   const [visibleReceipts, setVisibleReceipts] = useState({});
@@ -52,12 +52,11 @@ const ExpenseHistory = () => {
   const [groupedExpenses, setGroupedExpenses] = useState({});
   const [selectedMonth, setSelectedMonth] = useState('');
   const [selectedYear, setSelectedYear] = useState('');
-  
 
   useEffect(() => {
     const fetchExpenses = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/expenses');
+        const res = await axios.get(`${API_BASE}/api/expenses`);
         setAllExpenses(res.data);
       } catch (error) {
         console.error('Error fetching expenses:', error);
@@ -68,7 +67,7 @@ const ExpenseHistory = () => {
 
   useEffect(() => {
     let filtered = [...allExpenses];
-  
+
     if (selectedMonth && selectedYear) {
       filtered = filtered.filter((expense) => {
         const date = new Date(expense.createdAt);
@@ -78,7 +77,7 @@ const ExpenseHistory = () => {
         );
       });
     }
-  
+
     const grouped = groupBy === 'week' ? groupByWeek(filtered) : groupByMonth(filtered);
     setGroupedExpenses(grouped);
   }, [groupBy, allExpenses, selectedMonth, selectedYear]);
@@ -86,7 +85,7 @@ const ExpenseHistory = () => {
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this expense?')) return;
     try {
-      await axios.delete(`http://localhost:5000/api/expenses/${id}`);
+      await axios.delete(`${API_BASE}/api/expenses/${id}`);
       setAllExpenses((prev) => prev.filter((exp) => exp._id !== id));
     } catch (err) {
       console.error('Error deleting expense:', err);
@@ -105,29 +104,29 @@ const ExpenseHistory = () => {
       <h2 className="history-title">📜 Expense History</h2>
 
       <div className="filter-controls">
-  <label>Month:</label>
-  <select value={selectedMonth} onChange={(e) => setSelectedMonth(e.target.value)}>
-    <option value="">--</option>
-    {Array.from({ length: 12 }, (_, i) => (
-      <option key={i + 1} value={i + 1}>
-        {new Date(0, i).toLocaleString('default', { month: 'long' })}
-      </option>
-    ))}
-  </select>
+        <label>Month:</label>
+        <select value={selectedMonth} onChange={(e) => setSelectedMonth(e.target.value)}>
+          <option value="">--</option>
+          {Array.from({ length: 12 }, (_, i) => (
+            <option key={i + 1} value={i + 1}>
+              {new Date(0, i).toLocaleString('default', { month: 'long' })}
+            </option>
+          ))}
+        </select>
 
-  <label>Year:</label>
-  <select value={selectedYear} onChange={(e) => setSelectedYear(e.target.value)}>
-    <option value="">--</option>
-    {Array.from({ length: 36 }, (_, i) => {
-      const year = 2025 + i;
-      return (
-        <option key={year} value={year}>
-          {year}
-        </option>
-      );
-    })}
-  </select>
-</div>
+        <label>Year:</label>
+        <select value={selectedYear} onChange={(e) => setSelectedYear(e.target.value)}>
+          <option value="">--</option>
+          {Array.from({ length: 36 }, (_, i) => {
+            const year = 2025 + i;
+            return (
+              <option key={year} value={year}>
+                {year}
+              </option>
+            );
+          })}
+        </select>
+      </div>
 
       {Object.keys(groupedExpenses).length === 0 ? (
         <p className="no-expenses">No expenses found.</p>
@@ -139,12 +138,11 @@ const ExpenseHistory = () => {
               {expenses.map((expense) => (
                 <li key={expense._id} className="expense-card">
                   <div className="expense-details">
-                    
-                  <p>
-                  <strong>Amount:</strong>{' '}
-                  {currencySymbols[expense.currency] || '₦'}
-                  {Number(expense.amount).toLocaleString()}
-                  </p>
+                    <p>
+                      <strong>Amount:</strong>{' '}
+                      {currencySymbols[expense.currency] || '₦'}
+                      {Number(expense.amount).toLocaleString()}
+                    </p>
                     <p><strong>Description:</strong> {expense.description}</p>
                     <p><strong>Category:</strong> {expense.category}</p>
                     <p><strong>Date:</strong> {new Date(expense.createdAt).toLocaleString()}</p>
@@ -158,7 +156,7 @@ const ExpenseHistory = () => {
                         </button>
                         {visibleReceipts[expense._id] && (
                           <img
-                            src={`http://localhost:5000/uploads/${expense.receipt}`}
+                            src={`${API_BASE}/uploads/${expense.receipt}`}
                             alt="Receipt"
                             className="receipt-image"
                           />

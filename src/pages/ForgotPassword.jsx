@@ -1,11 +1,14 @@
 import { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 export default function ResetPassword() {
   const [form, setForm] = useState({ email: '', password: '', confirm: '' });
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();
 
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (e) =>
+    setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -16,12 +19,16 @@ export default function ResetPassword() {
     }
 
     try {
-      await axios.post('http://localhost:5000/api/auth/reset-password', {
+      await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/reset-password`, {
         email: form.email,
         password: form.password,
       });
 
       setMessage('✅ Password reset successfully. You can now log in.');
+
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000);
     } catch (err) {
       setMessage('❌ ' + (err.response?.data?.message || 'Reset failed'));
     }
@@ -58,11 +65,6 @@ export default function ResetPassword() {
         />
         <button type="submit">Reset Password</button>
       </form>
-      {message.includes('successful') && (
-      <button onClick={() => window.location.href = '/login'}>
-      Go to Login
-       </button>
-     )}
     </div>
   );
 }

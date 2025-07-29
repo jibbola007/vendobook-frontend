@@ -5,7 +5,6 @@ import './Summary.css';
 
 const currencySymbols = {
   NGN: '₦',
- 
 };
 
 const Summary = () => {
@@ -21,7 +20,7 @@ const Summary = () => {
   useEffect(() => {
     const fetchExpenses = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/expenses');
+        const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/expenses`);
         setExpenses(res.data);
       } catch (err) {
         console.error('Error fetching expenses:', err);
@@ -53,32 +52,41 @@ const Summary = () => {
 
   return (
     <div className="summary-container">
-  <h2 className="summary-title">📊 Expense Summary</h2>
+      <h2 className="summary-title">📊 Expense Summary</h2>
 
-  <div className="summary-cards">
-    <div className="summary-card">
-      <h3>Total Expenses</h3>
-      <p>{summary.count}</p>
-    </div>
-    <div className="summary-card">
-      <h3>Total Spent</h3>
-      <p>{currencySymbols[currency] || '₦'}{Number(summary.totalAmount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-    </div>
-  </div>
-
-  <h3 className="breakdown-title">🗂 Category Breakdown</h3>
-  <div className="category-grid">
-    {Object.entries(summary.categoryTotals).map(([category, total]) => (
-      <div key={category} className="category-card">
-        <span className="category-name">{category}</span>
-        <span className="category-amount">
-  {currencySymbols[currency] || '₦'}
-  {Number(total).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-</span>
+      <div className="summary-cards">
+        <div className="summary-card">
+          <h3>Total Expenses</h3>
+          <p>{summary.count}</p>
+        </div>
+        <div className="summary-card">
+          <h3>Total Spent</h3>
+          <p>
+            {currencySymbols[currency] || '₦'}
+            {Number(summary.totalAmount).toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2
+            })}
+          </p>
+        </div>
       </div>
-    ))}
-  </div>
-</div>
+
+      <h3 className="breakdown-title">🗂 Category Breakdown</h3>
+      <div className="category-grid">
+        {Object.entries(summary.categoryTotals).map(([category, total]) => (
+          <div key={category} className="category-card">
+            <span className="category-name">{category}</span>
+            <span className="category-amount">
+              {currencySymbols[currency] || '₦'}
+              {Number(total).toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+              })}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 };
 
