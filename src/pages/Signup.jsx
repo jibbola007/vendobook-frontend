@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
-import './signup.css';
+import './Signup.css';
 
 export default function Signup() {
   const [form, setForm] = useState({ email: '', password: '' });
