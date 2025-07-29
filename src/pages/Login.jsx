@@ -31,7 +31,7 @@ export default function Login() {
   return (
     <div className="login-container">
       <h1>Welcome To VendoBook</h1>
-      <p>Don't have an account? <Link to="/signup">Create one</Link></p>
+      <p>Don't have an account? <Link to="/Signup">Create one</Link></p>
       {message && <p>{message}</p>}
       <form onSubmit={handleSubmit}>
         <input name="email" value={form.email} onChange={handleChange} placeholder="Email" required />

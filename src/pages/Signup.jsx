@@ -13,7 +13,7 @@ export default function Signup() {
     e.preventDefault();
     try {
       const res = await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}/api/auth/signup`,
+        `${import.meta.env.VITE_API_BASE_URL}/api/auth/Signup`,
         form
       );
       localStorage.setItem('token', res.data.token);
@@ -47,7 +47,7 @@ export default function Signup() {
       </form>
 
       {message.includes('successfully') && (
-        <button onClick={() => (window.location.href = '/login')} style={{ marginTop: '1rem' }}>
+        <button onClick={() => (window.location.href = '/Login')} style={{ marginTop: '1rem' }}>
           Go to Login
         </button>
       )}
