@@ -9,24 +9,23 @@ export default function Login() {
   const [form, setForm] = useState({ email: '', password: '' });
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
-  const { setUser } = useAuth();
+  const { login } = useAuth();
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/auth/login`, form);
-      setUser(res.data.user);
-      localStorage.setItem('token', res.data.token);
-  
-      setMessage('✅ Logged in!');
-      navigate('/');
-    } catch (err) {
-      console.error(err);
-      setMessage('❌ ' + (err.response?.data?.message || 'Login failed'));
-    }
-  };
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/auth/login`, form);
+    const { token } = res.data;
+
+    login(token); // Use the login method from AuthContext
+    navigate('/'); // Redirect to home or dashboard
+  } catch (err) {
+    console.error('Login failed', err);
+    // Optional: show error to user with state
+  }
+};
 
   return (
     <div className="login-container">
