@@ -18,8 +18,9 @@ function AppContent() {
   const location = useLocation();
   const { user } = useAuth();
 
-  const hideNavbarPaths = ['/login', '/signup'];
-  const shouldShowNavbar = !hideNavbarPaths.includes(location.pathname);
+  const hideNavbarPaths = ['/login', '/signup', '/forgot-password'];
+  const currentPath = location.pathname.toLowerCase();
+  const shouldShowNavbar = !hideNavbarPaths.some(path => currentPath.startsWith(path));
 
   return (
     <div className="app-container">

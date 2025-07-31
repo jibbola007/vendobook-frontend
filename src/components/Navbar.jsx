@@ -4,6 +4,7 @@ import './Navbar.css';
 import ThemeToggle from './ThemeToggle';
 import { useAuth } from '../context/AuthContext';
 
+
 const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -11,6 +12,7 @@ const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
+
 
   const handleLogout = () => {
     logout();
@@ -21,14 +23,16 @@ const Navbar = () => {
   const linkClasses = (path) =>
     `nav-link ${location.pathname === path ? 'active' : ''}`;
 
+
   return (
     <header className="navbar">
+      
       <div className="navbar-left">
         <img src="/logo.png" alt="Logo" className="logo" />
       </div>
 
       <nav className="navbar-center">
-        <Link to="/" className={linkClasses('/')}>🏠 Home</Link>
+        <Link to="/" className={linkClasses('/')}>Home</Link>
         {user && (
           <>
             <Link to="/add" className={linkClasses('/add')}>Add Expense</Link>
@@ -39,7 +43,7 @@ const Navbar = () => {
       </nav>
 
       <div className="navbar-right">
-        {/* Hamburger for extra features */}
+        {/* 🍔 Hamburger icon */}
         <button className="hamburger" onClick={toggleMenu}>
           ☰
         </button>
